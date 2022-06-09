@@ -7,6 +7,8 @@ namespace RPG.UI.Shops
     public class ShopUI : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI _shopName;
+        [SerializeField] private Transform _listRoot;
+        [SerializeField] private RowUI _rowPrefab;
         
         private Shopper _shopper = null;
         private Shop _currentShop = null;
@@ -28,6 +30,22 @@ namespace RPG.UI.Shops
             
             if(_currentShop == null) return;
             _shopName.text = _currentShop.GetShopName();
+
+            RefreshUI();
+        }
+
+        private void RefreshUI()
+        {
+            foreach (Transform child in _listRoot)
+            {
+                Destroy(child.gameObject);//对象池   bug
+            }
+
+            foreach (var item in _currentShop.GetFilteredItems())
+            {
+                var row = Instantiate(_rowPrefab, _listRoot);
+                row.SetUp(item);
+            }
         }
 
         public void Close()

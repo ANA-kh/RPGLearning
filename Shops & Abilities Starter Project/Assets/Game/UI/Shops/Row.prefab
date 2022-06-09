@@ -321,6 +321,58 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5694011832600377716}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6796787356320058634 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1249251371985073278, guid: 9cdf03d4c1363dc4cb301e2e681aa4ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 5694011832600377716}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2693437649350549922 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7666308345350314198, guid: 9cdf03d4c1363dc4cb301e2e681aa4ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 5694011832600377716}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4316484103260832754 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8422306330055785094, guid: 9cdf03d4c1363dc4cb301e2e681aa4ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 5694011832600377716}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &468655989150309441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2933960251645915062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c5765e0dd54b108fd53ddf64862d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nameField: {fileID: 6796787356320058634}
+  _ico: {fileID: 7812400277078872139}
+  _availability: {fileID: 2693437649350549922}
+  _price: {fileID: 4316484103260832754}
 --- !u!114 &1203998881228936188
 MonoBehaviour:
   m_ObjectHideFlags: 0
