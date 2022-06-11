@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameDevTV.Inventories;
 using RPG.Control;
+using RPG.Inventories;
 using UnityEngine;
 
 namespace RPG.Shops
@@ -21,8 +22,17 @@ namespace RPG.Shops
         }
 
         Dictionary<InventoryItem,int> _transaction = new Dictionary<InventoryItem, int>();
+        Dictionary<InventoryItem,int> _stock = new Dictionary<InventoryItem, int>();
         private Shopper _curShoppper;
         public event Action onChange;
+
+        private void Awake()
+        {
+            foreach (var config in _stockItemConfigs)
+            {
+                _stock[config.Item] = config.InitialStock;
+            }
+        }
 
         public void SetShopper(Shopper shopper)
         {
@@ -40,7 +50,8 @@ namespace RPG.Shops
             {
                 var price = config.Item.GetPrice() * (1 - config.BuyingDiscountPercentage / 100);
                 _transaction.TryGetValue(config.Item, out var quantityInTransaction);
-                yield return new ShopItem(config.Item,config.InitialStock,price,quantityInTransaction);
+                var curStock = _stock[config.Item];
+                yield return new ShopItem(config.Item,curStock,price,quantityInTransaction);
             }
         }
 
@@ -62,25 +73,34 @@ namespace RPG.Shops
         {
             return true;
         }
+
         public void ConfirmTransaction()
         {
             Inventory shopperInventory = _curShoppper.GetComponent<Inventory>();
-            if(shopperInventory == null) return;
+            Purse shopperPurse = _curShoppper.GetComponent<Purse>();
+            
+            if (shopperInventory == null || shopperPurse == null) return;
 
-            var transactionSnapshot = new Dictionary<InventoryItem,int>(_transaction); 
-            foreach (var item in transactionSnapshot.Keys)
+            foreach (var shopItem in GetAllItems())
             {
-                var quantity = _transaction[item];
+                var item = shopItem.GetInventoryItem();
+                var quantity = shopItem.GetQuantityInTransaction();
+                var price = shopItem.GetPrice();
                 for (int i = 0; i < quantity; i++)
                 {
+                    if(shopperPurse.GetBalance() < price) break;
+                    
                     bool success = shopperInventory.AddToFirstEmptySlot(item, 1);
                     if (success)
                     {
-                        AddToTransaction(item,-1);
+                        AddToTransaction(item, -1);
+                        _stock[item]--;
+                        shopperPurse.UpdateBalance(-price);
                     }
                 }
-                shopperInventory.AddToFirstEmptySlot(item, quantity);
             }
+            
+            onChange?.Invoke();
         }
 
         public float TransactionTotal()
@@ -104,7 +124,14 @@ namespace RPG.Shops
                 _transaction[item] = 0;
             }
 
-            _transaction[item] += quantity;
+            if (_transaction[item] + quantity > _stock[item])
+            {
+                _transaction[item] = _stock[item];
+            }
+            else
+            {
+                _transaction[item] += quantity;
+            }
 
             if (_transaction[item] <= 0)
             {

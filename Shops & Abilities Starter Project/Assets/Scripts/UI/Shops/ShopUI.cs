@@ -1,6 +1,7 @@
 ﻿using RPG.Shops;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace RPG.UI.Shops
 {
@@ -10,6 +11,7 @@ namespace RPG.UI.Shops
         [SerializeField] private Transform _listRoot;
         [SerializeField] private RowUI _rowPrefab;
         [SerializeField] private TextMeshProUGUI _total;
+        [SerializeField] private Button _confirmButton;
         
         private Shopper _shopper = null;
         private Shop _currentShop = null;
@@ -20,6 +22,7 @@ namespace RPG.UI.Shops
             if(_shopper == null) return;
 
             _shopper.activeShopChange += ShopChanged;
+            _confirmButton.onClick.AddListener(ConfirmTransaction);
             
             ShopChanged();
         }
