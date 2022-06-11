@@ -7,22 +7,26 @@ namespace RPG.UI.Shops
 {
     public class ShopUI : MonoBehaviour
     {
-        [SerializeField] TextMeshProUGUI _shopName;
+        [SerializeField] private TextMeshProUGUI _shopName;
         [SerializeField] private Transform _listRoot;
         [SerializeField] private RowUI _rowPrefab;
-        [SerializeField] private TextMeshProUGUI _total;
+        [SerializeField] private TextMeshProUGUI _totalText;
         [SerializeField] private Button _confirmButton;
+        [SerializeField] private Button _switchButton;
         
         private Shopper _shopper = null;
         private Shop _currentShop = null;
+        private Color _originalTotalTextColor;
 
         private void Start()
         {
+            _originalTotalTextColor = _totalText.color;
              _shopper = GameObject.FindGameObjectWithTag("Player").GetComponent<Shopper>();
             if(_shopper == null) return;
 
             _shopper.activeShopChange += ShopChanged;
             _confirmButton.onClick.AddListener(ConfirmTransaction);
+            _switchButton.onClick.AddListener(SwitchMode);
             
             ShopChanged();
         }
@@ -55,7 +59,22 @@ namespace RPG.UI.Shops
                 row.SetUp(_currentShop,item);
             }
 
-            _total.text = $"Total : ${_currentShop.TransactionTotal():N2}";
+            _totalText.text = $"Total : ${_currentShop.TransactionTotal():N2}";
+            _totalText.color = _currentShop.HasSufficientFunds() ? _originalTotalTextColor : Color.red;
+            _confirmButton.interactable = _currentShop.CanTransact();
+
+            var switchText = _switchButton.GetComponentInChildren<TextMeshProUGUI>();
+            var confirmText = _confirmButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (_currentShop.IsBuyingMode())
+            {
+                switchText.text = "Switch To Selling";
+                confirmText.text = "Buy";
+            }
+            else
+            {
+                switchText.text = "Switch To Buying";
+                confirmText.text = "Sell";
+            }
         }
 
         public void Close()
@@ -66,6 +85,11 @@ namespace RPG.UI.Shops
         public void ConfirmTransaction()
         {
             _currentShop.ConfirmTransaction();
+        }
+
+        public void SwitchMode()
+        {
+            _currentShop.SelectMode(!_currentShop.IsBuyingMode());
         }
     }
 }

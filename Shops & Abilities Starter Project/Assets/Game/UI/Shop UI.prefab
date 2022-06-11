@@ -591,7 +591,7 @@ PrefabInstance:
     - target: {fileID: 3100948505544244822, guid: 1f6263c072d102e419b5fdb2db76d71d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3100948505544244822, guid: 1f6263c072d102e419b5fdb2db76d71d,
         type: 3}
@@ -1484,6 +1484,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f6263c072d102e419b5fdb2db76d71d, type: 3}
+--- !u!114 &8753849677691114935 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3100948505544244822, guid: 1f6263c072d102e419b5fdb2db76d71d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5941131755263912929}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6113926759624559574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2027,8 +2039,9 @@ MonoBehaviour:
   _listRoot: {fileID: 8200512131396442640}
   _rowPrefab: {fileID: 468655989150309441, guid: a869536da3af46645b14b72726e2e9fc,
     type: 3}
-  _total: {fileID: 7720967162028233111}
+  _totalText: {fileID: 7720967162028233111}
   _confirmButton: {fileID: 1113393402212202847}
+  _switchButton: {fileID: 8753849677691114935}
 --- !u!1001 &7689743049758130617
 PrefabInstance:
   m_ObjectHideFlags: 0

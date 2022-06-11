@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GameDevTV.Saving;
 using RPG.Core;
@@ -48,6 +50,40 @@ namespace GameDevTV.Inventories
         public bool HasSpaceFor(InventoryItem item)
         {
             return FindSlot(item) >= 0;
+        }
+
+        public bool HasSpaceFor(IEnumerable<InventoryItem> items)
+        {
+            int freeSlots = FreeSlots();
+            var stackedItems = new List<InventoryItem>();
+            foreach (var item in items)
+            {
+                if (item.IsStackable())
+                {
+                    if(HasItem(item))continue;
+                    if(stackedItems.Contains(item))continue;
+                    stackedItems.Add(item);
+                }
+
+                if (freeSlots<=0) return false;
+                freeSlots--;
+            }
+
+            return true;
+        }
+
+        public int FreeSlots()
+        {
+            var result = 0;
+            foreach (var slot in slots)
+            {
+                if (slot.number == 0)
+                {
+                    result++;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
