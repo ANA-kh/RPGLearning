@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameDevTV.Inventories;
 using RPG.Control;
 using RPG.Inventories;
+using RPG.Stats;
 using UnityEngine;
 
 namespace RPG.Shops
@@ -21,12 +23,14 @@ namespace RPG.Shops
             public InventoryItem Item;
             public int InitialStock;
             [Range(0, 100)] public float BuyingDiscountPercentage;
+            public int levleToUnlock = 0;
         }
 
         Dictionary<InventoryItem,int> _transaction = new Dictionary<InventoryItem, int>();
         Dictionary<InventoryItem,int> _stock = new Dictionary<InventoryItem, int>();
         private Shopper _curShoppper;
         private bool _isBuyingMode = true;
+        private ItemCategory _filter = ItemCategory.None;
         public event Action onChange;
 
         private void Awake()
@@ -44,18 +48,29 @@ namespace RPG.Shops
         
         public IEnumerable<ShopItem> GetFilteredItems()
         {
-            return GetAllItems();
+            return GetAllItems().Where(x =>_filter == ItemCategory.None || x.GetInventoryItem().GetCategory() == _filter);
         }
         
         public IEnumerable<ShopItem> GetAllItems()
         {
             foreach (var config in _stockItemConfigs)
             {
-                var price = GetPrice(config);
-                _transaction.TryGetValue(config.Item, out var quantityInTransaction);
-                var curStock = GetAvailability(config.Item);
-                yield return new ShopItem(config.Item,curStock,price,quantityInTransaction);
+                if (config.levleToUnlock <= GetShopperLevel())
+                {
+                    var price = GetPrice(config);
+                    _transaction.TryGetValue(config.Item, out var quantityInTransaction);
+                    var curStock = GetAvailability(config.Item);
+                    yield return new ShopItem(config.Item,curStock,price,quantityInTransaction);    
+                }
             }
+        }
+        
+        private int GetShopperLevel()
+        {
+            var stats = _curShoppper.GetComponent<BaseStats>();
+            if (stats ==null) return 0;
+
+            return stats.GetLevel();
         }
 
         private int GetAvailability(InventoryItem item)
@@ -97,11 +112,15 @@ namespace RPG.Shops
             return config.Item.GetPrice() * (_sellingDiscountPercentage / 100);
         }
 
-        public void SelectFilter(ItemCategory category){}
+        public void SelectFilter(ItemCategory category)
+        {
+            _filter = category;
+            onChange?.Invoke();
+        }
 
         public ItemCategory GetFilter()
         {
-            return ItemCategory.None;
+            return _filter;
         }
 
         public void SelectMode(bool isBuying)
