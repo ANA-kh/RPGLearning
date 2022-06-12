@@ -6156,7 +6156,7 @@ PrefabInstance:
     - target: {fileID: 4133218789624685160, guid: 35be8b7662b98d54eae435ebb1c5d5a8,
         type: 3}
       propertyPath: _stockItemConfigs.Array.data[1].BuyingDiscountPercentage
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4133218789624685160, guid: 35be8b7662b98d54eae435ebb1c5d5a8,
         type: 3}
@@ -13221,7 +13221,7 @@ PrefabInstance:
     - target: {fileID: 5263524460118599961, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -570.7498
+      value: -570.7499
       objectReference: {fileID: 0}
     - target: {fileID: 5263917500653042737, guid: 9065ec7e81ca8034a865d6fdd7906af9,
         type: 3}
