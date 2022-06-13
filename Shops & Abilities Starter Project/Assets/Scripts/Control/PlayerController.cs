@@ -3,6 +3,7 @@ using RPG.Movement;
 using UnityEngine;
 using RPG.Attributes;
 using System;
+using GameDevTV.Inventories;
 using UnityEngine.EventSystems;
 using UnityEngine.AI;
 
@@ -23,26 +24,43 @@ namespace RPG.Control
         [SerializeField] CursorMapping[] cursorMappings = null;
         [SerializeField] float maxNavMeshProjectionDistance = 1f;
         [SerializeField] float raycastRadius = 1f;
+        [SerializeField] private int _numberOfAbilities = 6;
 
         bool isDraggingUI = false;
+        private ActionStore _actionStore;
+        
 
         private void Awake() {
             health = GetComponent<Health>();
+            _actionStore = GetComponent<ActionStore>();
         }
 
         private void Update()
         {
-            if (InteractWithUI()) return;
+            if (InteractWithUI()) return;//UI交互时屏蔽其他点击操作
             if (health.IsDead()) 
             {
                 SetCursor(CursorType.None);
                 return;
             }
 
+            UseAbilities();
+
             if (InteractWithComponent()) return;
             if (InteractWithMovement()) return;
 
             SetCursor(CursorType.None);
+        }
+
+        private void UseAbilities()
+        {
+            for (int i = 0; i < _numberOfAbilities; i++)
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+                {
+                    _actionStore.Use(i,gameObject);
+                }   
+            }
         }
 
         private bool InteractWithUI()
@@ -151,7 +169,7 @@ namespace RPG.Control
             return cursorMappings[0];
         }
 
-        private static Ray GetMouseRay()
+        public static Ray GetMouseRay()
         {
             return Camera.main.ScreenPointToRay(Input.mousePosition);
         }
